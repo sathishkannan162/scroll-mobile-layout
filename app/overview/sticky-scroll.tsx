@@ -2,14 +2,16 @@
 import React, { useEffect, useRef } from "react";
 
 const StickyScroll = () => {
-  const headerRef = useRef(null);
-  const stockContentRef = useRef(null);
-  const lastScrollY = useRef(window.scrollY);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const stockContentRef = useRef<HTMLDivElement>(null);
+  const lastScrollY = useRef<number>(window.scrollY);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const isScrollingDown = currentScrollY > lastScrollY.current;
+
+      if (!stockContentRef.current || !headerRef.current) return;
 
       if (isScrollingDown) {
         // When scrolling up, Stock Content sticks to top-0
