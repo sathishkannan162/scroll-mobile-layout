@@ -1,48 +1,16 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
+import { useStickyScroll } from "./useStickyScroll";
 
 const StickyScroll = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const stockContentRef = useRef<HTMLDivElement>(null);
   const scrollableHeadingsRef = useRef<HTMLDivElement>(null);
-  const lastScrollY = useRef<number>(window.scrollY);
+  const refs = [headerRef, stockContentRef, scrollableHeadingsRef];
+  const downTops = ["-top-10", "top-0", "top-[96px]"];
+  const upTops = ["top-0", "top-10", "top-[136px]"];
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const isScrollingDown = currentScrollY > lastScrollY.current;
-
-      if (
-        !stockContentRef.current ||
-        !headerRef.current ||
-        !scrollableHeadingsRef.current
-      )
-        return;
-
-      if (isScrollingDown) {
-        // When scrolling up, Stock Content sticks to top-0
-        stockContentRef.current.classList.add("top-0");
-        stockContentRef.current.classList.remove("top-10");
-        headerRef.current.classList.add("-top-10");
-        headerRef.current.classList.remove("top-0");
-        scrollableHeadingsRef.current.classList.add("top-[96px]");
-        scrollableHeadingsRef.current.classList.remove("top-[136px]");
-      } else {
-        // When scrolling down, Header sticks to top-0, Stock Content below it
-        headerRef.current.classList.add("top-0");
-        headerRef.current.classList.remove("-top-10");
-        stockContentRef.current.classList.add("top-10");
-        stockContentRef.current.classList.remove("top-0");
-        scrollableHeadingsRef.current.classList.add("top-[136px]");
-        scrollableHeadingsRef.current.classList.remove("top-10");
-      }
-
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  useStickyScroll(refs, downTops, upTops);
 
   return (
     <div className="bg-white">
