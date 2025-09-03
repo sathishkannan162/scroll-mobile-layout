@@ -9,6 +9,16 @@ const StickyScroll = () => {
   const refs = [headerRef, stockContentRef, scrollableHeadingsRef];
   const downTops = ["-top-10", "top-0", "top-[96px]"];
   const upTops = ["top-0", "top-10", "top-[136px]"];
+  const sections = [
+    "section 1",
+    "section 2",
+    "section 3",
+    "section 4",
+    "section 5",
+    "section 6",
+    "section 7",
+    "section 8",
+  ];
 
   useStickyScroll(refs, downTops, upTops);
 
@@ -30,11 +40,27 @@ const StickyScroll = () => {
         </div>
         <div
           ref={scrollableHeadingsRef}
-          className="w-full bg-gray-100 h-24 sticky top-[136px] transition-all duration-200 z-0"
+          className="w-full bg-gray-100 sticky top-[136px] transition-all duration-200 z-0 flex overflow-x-auto gap-4 py-2 px-3"
         >
-          Scrollable headings
+          {sections.map((section) => (
+            <div key={section} className="shrink-0">
+              {section}
+            </div>
+          ))}
         </div>
-        <div className="w-full bg-gray-400 h-[1000px]">Content</div>
+        <div className="w-full bg-gray-400">
+          {sections.map((section) => {
+            return (
+              <div
+                className="h-80 odd:bg-gray-200 even:bg-gray-400"
+                id={section}
+                key={section}
+              >
+                {section}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
