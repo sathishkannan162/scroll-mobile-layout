@@ -5,10 +5,17 @@ export function useStickyScroll(
   downTops: string[],
   upTops: string[]
 ) {
-  const lastScrollY = useRef<number>(window.scrollY);
+  const lastScrollY = useRef<number>(0);
 
   useEffect(() => {
+    // Set initial scroll position from window if available
+    if (typeof window !== "undefined") {
+      lastScrollY.current = window.scrollY;
+    }
+
     const handleScroll = () => {
+      if (typeof window === "undefined") return;
+
       const currentScrollY = window.scrollY;
       const isScrollingDown = currentScrollY > lastScrollY.current;
 
