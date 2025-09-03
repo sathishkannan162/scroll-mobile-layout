@@ -42,7 +42,7 @@ const StickyScroll = () => {
       },
       {
         threshold: 0.1,
-        rootMargin: "-150px 0px -50px 0px",
+        rootMargin: "-150px 0px -150px 0px",
       }
     );
 
