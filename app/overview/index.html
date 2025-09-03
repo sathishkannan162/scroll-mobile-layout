@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Scroll-driven animation with JS fallback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --start-translate: 200px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        line-height: 1.4;
+      }
+
+      .hero {
+        min-height: 120vh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(#fff, #f2f2f2);
+      }
+
+      .box {
+        width: 160px;
+        height: 160px;
+        border-radius: 24px;
+        background: coral;
+        /* Initial state for both CSS & JS paths */
+        opacity: 0;
+        transform: translateY(var(--start-translate)) scale(0.6);
+        /* For JS fallback smoothing */
+        transition: transform 0.06s linear, opacity 0.06s linear;
+      }
+
+      .spacer {
+        height: 120vh; /* gives us room to scroll */
+        background: linear-gradient(#f2f2f2, #e6e6e6);
+      }
+
+      /* ---- CSS scroll-driven animation (modern syntax) ---- */
+      @supports (animation-timeline: scroll()) {
+        .box {
+          /* Define the animation as usual... */
+          animation-name: fadeMove;
+          animation-duration: 1s; /* non-zero duration keeps the animation "alive" */
+          animation-timing-function: linear;
+          animation-fill-mode: both;
+          /* ...then attach it to the scroll timeline */
+          animation-timeline: scroll(); /* ties to the page/nearest scroller */
+          animation-range: 0% 100%; /* map entire scroll range to the animation */
+        }
+
+        @keyframes fadeMove {
+          0% {
+            opacity: 0;
+            transform: translateY(var(--start-translate)) scale(0.6);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero">
+      <div class="box" id="box"></div>
+    </section>
+    <div class="spacer"></div>
+
+    <script>
+      // ---- JS fallback: only used when CSS scroll() timeline isn't supported ----
+      if (!CSS.supports("animation-timeline: scroll()")) {
+        const box = document.getElementById("box");
+
+        function getMaxScroll() {
+          const doc = document.documentElement;
+          return Math.max(1, doc.scrollHeight - doc.clientHeight);
+        }
+
+        let maxScroll = getMaxScroll();
+        window.addEventListener("resize", () => {
+          maxScroll = getMaxScroll();
+        });
+
+        // rAF throttle for smoothness
+        let ticking = false;
+        function onScroll() {
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              const y =
+                window.scrollY || document.documentElement.scrollTop || 0;
+              const progress = Math.min(Math.max(y / maxScroll, 0), 1);
+
+              // same keyframe mapping as CSS:
+              // 0%  -> opacity:0; translateY(var(--start-translate)) scale(0.6)
+              // 100%-> opacity:1; translateY(0) scale(1)
+              const start = 200; // must match --start-translate (px)
+              const translateY = start * (1 - progress);
+              const scale = 0.6 + 0.4 * progress;
+
+              box.style.opacity = progress;
+              box.style.transform = `translateY(${translateY}px) scale(${scale})`;
+
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }
+
+        // Set the initial state based on starting scroll position
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+      }
+    </script>
+  </body>
+</html>
