@@ -22,9 +22,36 @@ const StickyScroll = () => {
   const sectionRefs = useRef<Array<HTMLDivElement | null>>(
     sections.map(() => null)
   );
+  const sectionHeadingRefs = useRef<Array<HTMLDivElement | null>>(
+    sections.map(() => null)
+  );
   const [activeSection, setActiveSection] = useState<string>("");
 
   useStickyScroll(refs, downTops, upTops);
+
+  useEffect(() => {
+    const index = sections.indexOf(activeSection);
+    if (
+      index !== -1 &&
+      sectionHeadingRefs.current[index] &&
+      scrollableHeadingsRef.current
+    ) {
+      const el = sectionHeadingRefs.current[index];
+      const container = scrollableHeadingsRef.current;
+      if (el && container) {
+        const left = el.offsetLeft - container.offsetLeft;
+        const right = left + el.offsetWidth;
+        const visibleLeft = container.scrollLeft;
+        const visibleRight = visibleLeft + container.offsetWidth;
+        if (left < visibleLeft || right > visibleRight) {
+          container.scrollTo({
+            left: left - (container.offsetWidth / 2 - el.offsetWidth / 2),
+            behavior: "smooth",
+          });
+        }
+      }
+    }
+  }, [activeSection, sections]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -80,9 +107,12 @@ const StickyScroll = () => {
           ref={scrollableHeadingsRef}
           className="w-full bg-gray-100 sticky top-[136px] transition-all duration-200 z-0 flex overflow-x-auto gap-4 py-2 px-3"
         >
-          {sections.map((section) => (
+          {sections.map((section, index) => (
             <div
               key={section}
+              ref={(el) => {
+                sectionHeadingRefs.current[index] = el;
+              }}
               className={`shrink-0 cursor-pointer px-2 py-1 rounded ${
                 section === activeSection ? "bg-blue-500 text-white" : ""
               }`}
