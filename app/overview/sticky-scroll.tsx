@@ -31,25 +31,12 @@ const StickyScroll = () => {
 
   useEffect(() => {
     const index = sections.indexOf(activeSection);
-    if (
-      index !== -1 &&
-      sectionHeadingRefs.current[index] &&
-      scrollableHeadingsRef.current
-    ) {
-      const el = sectionHeadingRefs.current[index];
-      const container = scrollableHeadingsRef.current;
-      if (el && container) {
-        const left = el.offsetLeft - container.offsetLeft;
-        const right = left + el.offsetWidth;
-        const visibleLeft = container.scrollLeft;
-        const visibleRight = visibleLeft + container.offsetWidth;
-        if (left < visibleLeft || right > visibleRight) {
-          container.scrollTo({
-            left: left - (container.offsetWidth / 2 - el.offsetWidth / 2),
-            behavior: "smooth",
-          });
-        }
-      }
+    if (index !== -1 && sectionHeadingRefs.current[index]) {
+      sectionHeadingRefs.current[index]?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
     }
   }, [activeSection, sections]);
 
