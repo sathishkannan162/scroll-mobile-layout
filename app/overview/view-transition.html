@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>View Transitions Example</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      .box {
+        width: 150px;
+        height: 150px;
+        margin: 20px auto;
+        background: coral;
+        border-radius: 12px;
+        view-transition-name: my-box; /* this links element for animation */
+      }
+
+      .blue {
+        background: steelblue;
+      }
+
+      /* Customize the animation (optional) */
+      ::view-transition-old(my-box),
+      ::view-transition-new(my-box) {
+        animation-duration: 0.6s;
+        animation-timing-function: ease-in-out;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>View Transition Demo (CSS only)</h1>
+    <div id="box" class="box"></div>
+    <button id="toggle">Toggle Color</button>
+
+    <script>
+      const box = document.getElementById("box");
+      const btn = document.getElementById("toggle");
+
+      btn.addEventListener("click", () => {
+        // No fallback — only works in Chrome
+        document.startViewTransition(() => {
+          box.classList.toggle("blue");
+        });
+      });
+    </script>
+  </body>
+</html>
