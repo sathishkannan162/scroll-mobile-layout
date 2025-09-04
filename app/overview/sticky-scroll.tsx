@@ -263,7 +263,7 @@ const StickyScroll = () => {
         </div>
         <div
           ref={scrollableHeadingsRef}
-          className="w-full bg-gray-100 sticky top-[136px] transition-all duration-200 z-0 flex items-center"
+          className="w-full bg-gray-100 sticky  transition-all duration-200 z-0 flex items-center"
         >
           <button
             onClick={scrollLeft}
