@@ -7,6 +7,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { useStickyScroll } from "./useStickyScroll";
+import { cn } from "@/lib/utils";
 
 const StickyScroll = () => {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -132,9 +133,10 @@ const StickyScroll = () => {
         >
           {/* Expanded Layout (Non-sticky) */}
           <div
-            className={`transition-all duration-300 ${
+            className={cn(
+              "transition-all duration-300",
               isSticky ? "opacity-0 h-0 overflow-hidden" : "opacity-100 h-auto"
-            }`}
+            )}
           >
             <div className="flex flex-col justify-start items-start w-full gap-2.5 bg-white px-4 pt-2.5">
               <div className="flex justify-start items-start w-full gap-[42px]">
@@ -209,9 +211,10 @@ const StickyScroll = () => {
 
           {/* Compact Layout (Sticky) */}
           <div
-            className={`transition-all duration-300 ${
+            className={cn(
+              "transition-all duration-300",
               isSticky ? "opacity-100 h-auto" : "opacity-0 h-0 overflow-hidden"
-            }`}
+            )}
           >
             <div className="flex justify-start items-center gap-[75px] px-4 py-3 bg-white">
               <div className="flex justify-start items-center relative gap-3">
