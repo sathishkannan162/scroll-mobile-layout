@@ -14,8 +14,8 @@ const StickyScroll = () => {
   const scrollableHeadingsRef = useRef<HTMLDivElement>(null);
   const headingsContainerRef = useRef<HTMLDivElement>(null);
   const refs = [headerRef, stockContentRef, scrollableHeadingsRef];
-  const downTops = ["-top-10", "top-0", "top-[96px]"];
-  const upTops = ["top-0", "top-10", "top-[136px]"];
+  const downTops = ["-top-10", "top-0", "top-[58px]"];
+  const upTops = ["top-0", "top-10", "top-[100px]"];
   const [isSticky, setIsSticky] = useState(false);
   const sections = [
     "section 1",
