@@ -1,7 +1,7 @@
-import { useEffect, useRef, RefObject } from "react";
+import { useEffect, useRef } from "react";
 
 export function useStickyScroll(
-  refs: RefObject<HTMLElement | null>[],
+  elementIds: string[],
   downTops: string[],
   upTops: string[]
 ) {
@@ -19,18 +19,21 @@ export function useStickyScroll(
       const currentScrollY = window.scrollY;
       const isScrollingDown = currentScrollY > lastScrollY.current;
 
-      // Ensure all refs are present
-      if (!refs.every((ref) => ref.current)) return;
+      // Get elements by ID and ensure they exist
+      const elements = elementIds.map((id) => document.getElementById(id));
+      if (!elements.every((element) => element)) return;
 
-      refs.forEach((ref, index) => {
-        if (isScrollingDown) {
-          // Scrolling down: apply down classes
-          ref.current!.classList.add(downTops[index]);
-          ref.current!.classList.remove(upTops[index]);
-        } else {
-          // Scrolling up: apply up classes
-          ref.current!.classList.add(upTops[index]);
-          ref.current!.classList.remove(downTops[index]);
+      elements.forEach((element, index) => {
+        if (element) {
+          if (isScrollingDown) {
+            // Scrolling down: apply down classes
+            element.classList.add(downTops[index]);
+            element.classList.remove(upTops[index]);
+          } else {
+            // Scrolling up: apply up classes
+            element.classList.add(upTops[index]);
+            element.classList.remove(downTops[index]);
+          }
         }
       });
 
@@ -39,5 +42,5 @@ export function useStickyScroll(
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [refs, downTops, upTops]);
+  }, [elementIds, downTops, upTops]);
 }

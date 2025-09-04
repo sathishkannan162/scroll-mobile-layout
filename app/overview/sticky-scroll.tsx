@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -10,11 +10,11 @@ import { useStickyScroll } from "./useStickyScroll";
 import { cn } from "@/lib/utils";
 
 const StickyScroll = () => {
-  const headerRef = useRef<HTMLDivElement>(null);
-  const stockContentRef = useRef<HTMLDivElement>(null);
-  const scrollableHeadingsRef = useRef<HTMLDivElement>(null);
-  const headingsContainerRef = useRef<HTMLDivElement>(null);
-  const refs = [headerRef, stockContentRef, scrollableHeadingsRef];
+  const elementIds = [
+    "header-element",
+    "stock-content-element",
+    "scrollable-headings-element",
+  ];
   const downTops = ["-top-10", "top-0", "top-[58px]"];
   const upTops = ["top-0", "top-10", "top-[100px]"];
   const [isSticky, setIsSticky] = useState(false);
@@ -28,21 +28,18 @@ const StickyScroll = () => {
     "section 7",
     "section 8",
   ];
-  const sectionRefs = useRef<Array<HTMLDivElement | null>>(
-    sections.map(() => null)
-  );
-  const sectionHeadingRefs = useRef<Array<HTMLDivElement | null>>(
-    sections.map(() => null)
-  );
   const [activeSection, setActiveSection] = useState<string>("");
 
-  useStickyScroll(refs, downTops, upTops);
+  useStickyScroll(elementIds, downTops, upTops);
 
   // Monitor sticky state
   useEffect(() => {
     const handleScroll = () => {
-      if (stockContentRef.current) {
-        const rect = stockContentRef.current.getBoundingClientRect();
+      const stockContentElement = document.getElementById(
+        "stock-content-element"
+      );
+      if (stockContentElement) {
+        const rect = stockContentElement.getBoundingClientRect();
         const isCurrentlySticky = rect.top <= 40; // 40px is the header height (top-10)
         setIsSticky(isCurrentlySticky);
       }
@@ -56,12 +53,17 @@ const StickyScroll = () => {
 
   useEffect(() => {
     const index = sections.indexOf(activeSection);
-    if (index !== -1 && sectionHeadingRefs.current[index]) {
-      sectionHeadingRefs.current[index]?.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      });
+    if (index !== -1) {
+      const sectionHeadingElement = document.getElementById(
+        `section-heading-${index}`
+      );
+      if (sectionHeadingElement) {
+        sectionHeadingElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
     }
   }, [activeSection, sections]);
 
@@ -70,9 +72,8 @@ const StickyScroll = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const index = sectionRefs.current.indexOf(
-              entry.target as HTMLDivElement
-            );
+            const sectionId = entry.target.id;
+            const index = sections.indexOf(sectionId);
             if (index !== -1) {
               setActiveSection(sections[index]);
             }
@@ -85,8 +86,9 @@ const StickyScroll = () => {
       }
     );
 
-    sectionRefs.current.forEach((section) => {
-      if (section) observer.observe(section);
+    sections.forEach((section) => {
+      const sectionElement = document.getElementById(section);
+      if (sectionElement) observer.observe(sectionElement);
     });
 
     return () => observer.disconnect();
@@ -100,8 +102,9 @@ const StickyScroll = () => {
   };
 
   const scrollLeft = () => {
-    if (headingsContainerRef.current) {
-      headingsContainerRef.current.scrollBy({
+    const headingsContainer = document.getElementById("headings-container");
+    if (headingsContainer) {
+      headingsContainer.scrollBy({
         left: -200,
         behavior: "smooth",
       });
@@ -109,8 +112,9 @@ const StickyScroll = () => {
   };
 
   const scrollRight = () => {
-    if (headingsContainerRef.current) {
-      headingsContainerRef.current.scrollBy({
+    const headingsContainer = document.getElementById("headings-container");
+    if (headingsContainer) {
+      headingsContainer.scrollBy({
         left: 200,
         behavior: "smooth",
       });
@@ -121,14 +125,14 @@ const StickyScroll = () => {
     <div className="bg-white">
       <div>
         <div
-          ref={headerRef}
+          id="header-element"
           className="w-full bg-gray-200 h-10 sticky top-0 transition-all duration-200 z-20"
         >
           Header
         </div>
         <div className="w-full bg-gray-100 h-10">Breadcrumbs</div>
         <div
-          ref={stockContentRef}
+          id="stock-content-element"
           className="w-full bg-white sticky top-10 transition-all duration-300 z-10 border-b border-gray-200"
         >
           {/* Adaptive Layout - Changes based on isSticky */}
@@ -330,7 +334,7 @@ const StickyScroll = () => {
           </div>
         </div>
         <div
-          ref={scrollableHeadingsRef}
+          id="scrollable-headings-element"
           className="w-full bg-gray-100 sticky  transition-all duration-200 z-0 flex items-center"
         >
           <button
@@ -340,15 +344,13 @@ const StickyScroll = () => {
             <ChevronLeft className="w-4 h-4" />
           </button>
           <div
-            ref={headingsContainerRef}
+            id="headings-container"
             className="flex-1 overflow-x-auto flex gap-4 py-2 px-3"
           >
             {sections.map((section, index) => (
               <div
                 key={section}
-                ref={(el) => {
-                  sectionHeadingRefs.current[index] = el;
-                }}
+                id={`section-heading-${index}`}
                 className={`shrink-0 cursor-pointer px-2 py-1 rounded ${
                   section === activeSection ? "bg-blue-500 text-white" : ""
                 }`}
@@ -372,9 +374,6 @@ const StickyScroll = () => {
                 className="h-80 odd:bg-gray-200 even:bg-gray-400"
                 id={section}
                 key={section}
-                ref={(el) => {
-                  sectionRefs.current[index] = el;
-                }}
               >
                 {section}
               </div>
