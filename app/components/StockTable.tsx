@@ -85,22 +85,46 @@ export default function StockTable() {
   ];
 
   const cellFormats = [
-    { key: "symbolMain", sub: "symbolSub" },
-    { key: "ltpValue", sub: "ltpChange" },
-    { key: "premDis" },
-    { key: "oi" },
-    { key: "oiChangeValue", sub: "oiChangePercent" },
-    { key: "high" },
-    { key: "low" },
-    { key: "volume" },
-    { key: "open" },
-    { key: "close" },
-    { key: "avgPrice" },
-    { key: "turnover" },
-    { key: "trades" },
-    { key: "deliveryQty" },
-    { key: "deliveryPercent" },
-    { key: "vwap" },
+    {
+      render: (stock: (typeof stockData)[0]) => (
+        <>
+          {stock.symbolMain}
+          <br />
+          {stock.symbolSub}
+        </>
+      ),
+    },
+    {
+      render: (stock: (typeof stockData)[0]) => (
+        <>
+          {stock.ltpValue}
+          <br />
+          {stock.ltpChange}
+        </>
+      ),
+    },
+    { render: (stock: (typeof stockData)[0]) => stock.premDis },
+    { render: (stock: (typeof stockData)[0]) => stock.oi },
+    {
+      render: (stock: (typeof stockData)[0]) => (
+        <>
+          {stock.oiChangeValue}
+          <br />
+          {stock.oiChangePercent}
+        </>
+      ),
+    },
+    { render: (stock: (typeof stockData)[0]) => stock.high },
+    { render: (stock: (typeof stockData)[0]) => stock.low },
+    { render: (stock: (typeof stockData)[0]) => stock.volume },
+    { render: (stock: (typeof stockData)[0]) => stock.open },
+    { render: (stock: (typeof stockData)[0]) => stock.close },
+    { render: (stock: (typeof stockData)[0]) => stock.avgPrice },
+    { render: (stock: (typeof stockData)[0]) => stock.turnover },
+    { render: (stock: (typeof stockData)[0]) => stock.trades },
+    { render: (stock: (typeof stockData)[0]) => stock.deliveryQty },
+    { render: (stock: (typeof stockData)[0]) => stock.deliveryPercent },
+    { render: (stock: (typeof stockData)[0]) => stock.vwap },
   ];
 
   return (
@@ -116,15 +140,7 @@ export default function StockTable() {
         {stockData.map((stock, index) => (
           <tr key={index}>
             {cellFormats.map((format, idx) => (
-              <td key={idx}>
-                {stock[format.key as keyof typeof stock]}
-                {format.sub && (
-                  <>
-                    <br />
-                    {stock[format.sub as keyof typeof stock]}
-                  </>
-                )}
-              </td>
+              <td key={idx}>{format.render(stock)}</td>
             ))}
           </tr>
         ))}
