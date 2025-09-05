@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 interface StockData {
   symbolMain: string;
   symbolSub: string;
@@ -118,7 +120,7 @@ export default function StockTable() {
       <>
         {stock.ltpValue}
         <br />
-        {stock.ltpChange}
+        <span className="whitespace-nowrap">{stock.ltpChange}</span>
       </>
     ),
     (stock: StockData) => stock.premDis,
@@ -143,14 +145,19 @@ export default function StockTable() {
     (stock: StockData) => stock.vwap,
   ];
 
+  const firstCellClassNames = "text-left min-w-[200px] pl-0";
+
   return (
-    <table>
+    <table className="table-auto">
       <thead>
         <tr>
           {headers.map((header, index) => (
             <th
-              className="min-w-[250px] font-normal first:text-left text-right"
               key={index}
+              className={cn(
+                "min-w-[100px] font-normal text-right px-2 py-1 whitespace-nowrap",
+                index === 0 && "text-left min-w-[200px] pl-0"
+              )}
             >
               {header}
             </th>
@@ -162,8 +169,11 @@ export default function StockTable() {
           <tr key={index}>
             {displayFormat.map((format, idx) => (
               <td
-                className="min-w-[250px] font-normal first:text-left text-right"
                 key={idx}
+                className={cn(
+                  "min-w-[100px] font-normal text-right px-2 py-1 whitespace-nowrap",
+                  idx === 0 && firstCellClassNames
+                )}
               >
                 {format(stock)}
               </td>
