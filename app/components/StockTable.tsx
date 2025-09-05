@@ -84,6 +84,25 @@ export default function StockTable() {
     "VWAP",
   ];
 
+  const cellFormats = [
+    { key: "symbolMain", sub: "symbolSub" },
+    { key: "ltpValue", sub: "ltpChange" },
+    { key: "premDis" },
+    { key: "oi" },
+    { key: "oiChangeValue", sub: "oiChangePercent" },
+    { key: "high" },
+    { key: "low" },
+    { key: "volume" },
+    { key: "open" },
+    { key: "close" },
+    { key: "avgPrice" },
+    { key: "turnover" },
+    { key: "trades" },
+    { key: "deliveryQty" },
+    { key: "deliveryPercent" },
+    { key: "vwap" },
+  ];
+
   return (
     <table>
       <thead>
@@ -96,26 +115,17 @@ export default function StockTable() {
       <tbody>
         {stockData.map((stock, index) => (
           <tr key={index}>
-            <td>
-              {stock.symbolMain}
-              <br />
-              {stock.symbolSub}
-            </td>
-            <td>
-              {stock.ltpValue}
-              <br />
-              {stock.ltpChange}
-            </td>
-            <td>{stock.premDis}</td>
-            <td>{stock.oi}</td>
-            <td>
-              {stock.oiChangeValue}
-              <br />
-              {stock.oiChangePercent}
-            </td>
-            <td>{stock.high}</td>
-            <td>{stock.low}</td>
-            <td>{stock.volume}</td>
+            {cellFormats.map((format, idx) => (
+              <td key={idx}>
+                {stock[format.key as keyof typeof stock]}
+                {format.sub && (
+                  <>
+                    <br />
+                    {stock[format.sub as keyof typeof stock]}
+                  </>
+                )}
+              </td>
+            ))}
           </tr>
         ))}
       </tbody>
