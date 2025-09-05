@@ -1,5 +1,27 @@
+interface StockData {
+  symbolMain: string;
+  symbolSub: string;
+  ltpValue: string;
+  ltpChange: string;
+  premDis: string;
+  oi: string;
+  oiChangeValue: string;
+  oiChangePercent: string;
+  high: string;
+  low: string;
+  volume: string;
+  open: string;
+  close: string;
+  avgPrice: string;
+  turnover: string;
+  trades: string;
+  deliveryQty: string;
+  deliveryPercent: string;
+  vwap: string;
+}
+
 export default function StockTable() {
-  const stockData = [
+  const stockData: StockData[] = [
     {
       symbolMain: "RELIANCE 30SEP FUT",
       symbolSub: "NFO",
@@ -84,47 +106,41 @@ export default function StockTable() {
     "VWAP",
   ];
 
-  const cellFormats = [
-    {
-      render: (stock: (typeof stockData)[0]) => (
-        <>
-          {stock.symbolMain}
-          <br />
-          {stock.symbolSub}
-        </>
-      ),
-    },
-    {
-      render: (stock: (typeof stockData)[0]) => (
-        <>
-          {stock.ltpValue}
-          <br />
-          {stock.ltpChange}
-        </>
-      ),
-    },
-    { render: (stock: (typeof stockData)[0]) => stock.premDis },
-    { render: (stock: (typeof stockData)[0]) => stock.oi },
-    {
-      render: (stock: (typeof stockData)[0]) => (
-        <>
-          {stock.oiChangeValue}
-          <br />
-          {stock.oiChangePercent}
-        </>
-      ),
-    },
-    { render: (stock: (typeof stockData)[0]) => stock.high },
-    { render: (stock: (typeof stockData)[0]) => stock.low },
-    { render: (stock: (typeof stockData)[0]) => stock.volume },
-    { render: (stock: (typeof stockData)[0]) => stock.open },
-    { render: (stock: (typeof stockData)[0]) => stock.close },
-    { render: (stock: (typeof stockData)[0]) => stock.avgPrice },
-    { render: (stock: (typeof stockData)[0]) => stock.turnover },
-    { render: (stock: (typeof stockData)[0]) => stock.trades },
-    { render: (stock: (typeof stockData)[0]) => stock.deliveryQty },
-    { render: (stock: (typeof stockData)[0]) => stock.deliveryPercent },
-    { render: (stock: (typeof stockData)[0]) => stock.vwap },
+  const displayFormat = [
+    (stock: StockData) => (
+      <>
+        {stock.symbolMain}
+        <br />
+        {stock.symbolSub}
+      </>
+    ),
+    (stock: StockData) => (
+      <>
+        {stock.ltpValue}
+        <br />
+        {stock.ltpChange}
+      </>
+    ),
+    (stock: StockData) => stock.premDis,
+    (stock: StockData) => stock.oi,
+    (stock: StockData) => (
+      <>
+        {stock.oiChangeValue}
+        <br />
+        {stock.oiChangePercent}
+      </>
+    ),
+    (stock: StockData) => stock.high,
+    (stock: StockData) => stock.low,
+    (stock: StockData) => stock.volume,
+    (stock: StockData) => stock.open,
+    (stock: StockData) => stock.close,
+    (stock: StockData) => stock.avgPrice,
+    (stock: StockData) => stock.turnover,
+    (stock: StockData) => stock.trades,
+    (stock: StockData) => stock.deliveryQty,
+    (stock: StockData) => stock.deliveryPercent,
+    (stock: StockData) => stock.vwap,
   ];
 
   return (
@@ -132,15 +148,25 @@ export default function StockTable() {
       <thead>
         <tr>
           {headers.map((header, index) => (
-            <th key={index}>{header}</th>
+            <th
+              className="min-w-[250px] font-normal first:text-left text-right"
+              key={index}
+            >
+              {header}
+            </th>
           ))}
         </tr>
       </thead>
       <tbody>
         {stockData.map((stock, index) => (
           <tr key={index}>
-            {cellFormats.map((format, idx) => (
-              <td key={idx}>{format.render(stock)}</td>
+            {displayFormat.map((format, idx) => (
+              <td
+                className="min-w-[250px] font-normal first:text-left text-right"
+                key={idx}
+              >
+                {format(stock)}
+              </td>
             ))}
           </tr>
         ))}
