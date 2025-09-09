@@ -145,9 +145,12 @@ export default function StockTable() {
   const firstCellClassNames = cn(
     "text-left min-w-[200px] pl-0 font-semibold border-r border-tr-gray-200 sticky left-0 bg-white"
   );
+  const firstHeaderClassNames = cn(
+    "text-left min-w-[200px] pl-0 border-r border-tr-gray-200 sticky left-0 bg-white"
+  );
 
   return (
-    <table className="table-auto border-separate">
+    <table className="table table-auto border-separate border-spacing-0">
       <thead>
         <tr className="">
           {headers.map((header, index) => (
@@ -155,8 +158,7 @@ export default function StockTable() {
               key={index}
               className={cn(
                 "min-w-[100px] font-normal text-right px-2 py-1 whitespace-nowrap border-t border-gray-200 text-tr-gray-800 text-sm",
-                index === 0 &&
-                  "text-left min-w-[200px] pl-0 border-r border-tr-gray-200 sticky left-0 bg-white"
+                index === 0 && firstHeaderClassNames
               )}
             >
               {header}
