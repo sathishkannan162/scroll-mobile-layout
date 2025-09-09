@@ -41,6 +41,26 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* custom colors as CSS variables */
+  --color-tr-green-100: #ecfae5;
+  --color-tr-green-150: #f7fcf9;
+  --color-tr-green-200: #edffff;
+  --color-tr-green: #38b990;
+  --color-tr-green-toggle: #38b99a3b;
+  --color-tr-green-table-band: #f7fcf9;
+  --color-tr-green-table-header: #effaf7;
+
+  --color-tr-gray-100: #f8f8f8;
+  --color-tr-gray-200: #dfeae7;
+  --color-tr-gray-300: #ececec;
+  --color-tr-gray-800: #777777;
+  --color-tr-gray: #565c5b;
+
+  --color-tr-red: #f85454;
+  --color-tr-orange: hsl(var(--color-tr-orange));
+
+  --font-inter: "Inter", sans-serif;
 }
 
 :root {
@@ -188,7 +208,7 @@
     height: 4px;
   }
   &::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: #999;
     border-radius: 2px;
   }
   &::-webkit-scrollbar-track {

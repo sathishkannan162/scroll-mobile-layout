@@ -4,7 +4,7 @@ export default function Page() {
     <div className="max-w-[1400px] mx-auto">
       <div className="py-4">
         <div>Stock Table</div>
-        <div className="w-full overflow-x-auto scrollbar-small">
+        <div className="w-full overflow-x-auto scrollbar-small ">
           <StockTable />
         </div>
       </div>
