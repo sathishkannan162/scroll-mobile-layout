@@ -111,25 +111,22 @@ export default function StockTable() {
   const displayFormat = [
     (stock: StockData) => (
       <>
-        {stock.symbolMain}
-        <br />
-        {stock.symbolSub}
+        <div className="text-xs">{stock.symbolMain}</div>
+        <div className="text-[11px]">{stock.symbolSub}</div>
       </>
     ),
     (stock: StockData) => (
       <>
-        {stock.ltpValue}
-        <br />
-        <span className="whitespace-nowrap">{stock.ltpChange}</span>
+        <div className="text-xs">{stock.ltpValue}</div>
+        <div className="text-[11px] text-tr-green">{stock.ltpChange}</div>
       </>
     ),
     (stock: StockData) => stock.premDis,
     (stock: StockData) => stock.oi,
     (stock: StockData) => (
       <>
-        {stock.oiChangeValue}
-        <br />
-        {stock.oiChangePercent}
+        <div className="text-xs">{stock.oiChangeValue}</div>
+        <div className="text-[11px] text-tr-red">{stock.oiChangePercent}</div>
       </>
     ),
     (stock: StockData) => stock.high,
@@ -145,7 +142,7 @@ export default function StockTable() {
     (stock: StockData) => stock.vwap,
   ];
 
-  const firstCellClassNames = "text-left min-w-[200px] pl-0";
+  const firstCellClassNames = cn("text-left min-w-[200px] pl-0 font-semibold");
 
   return (
     <table className="table-auto border-separate">
@@ -155,7 +152,7 @@ export default function StockTable() {
             <th
               key={index}
               className={cn(
-                "min-w-[100px] font-normal text-right px-2 py-1 whitespace-nowrap border-t border-gray-200 text-tr-gray-800",
+                "min-w-[100px] font-normal text-right px-2 py-1 whitespace-nowrap border-t border-gray-200 text-tr-gray-800 text-sm",
                 index === 0 && "text-left min-w-[200px] pl-0"
               )}
             >
@@ -171,7 +168,7 @@ export default function StockTable() {
               <td
                 key={idx}
                 className={cn(
-                  "min-w-[100px] font-normal text-right px-2 py-1 whitespace-nowrap border-t border-gray-200",
+                  "min-w-[100px]  text-right px-2 py-1 whitespace-nowrap border-t border-gray-200 text-sm font-medium",
                   idx === 0 && firstCellClassNames
                 )}
               >
