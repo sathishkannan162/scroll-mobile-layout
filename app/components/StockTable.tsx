@@ -59,10 +59,10 @@ export default function StockTable() {
   ];
 
   const firstCellClassNames = cn(
-    "text-left min-w-[200px] pl-0 font-semibold border-r border-tr-gray-200 sticky left-0 bg-white"
+    "text-left min-w-[200px] pl-0 font-semibold border-r border-tr-gray-200 sticky left-0 bg-white shadow-tr-1"
   );
   const firstHeaderClassNames = cn(
-    "text-left min-w-[200px] pl-0 border-r border-tr-gray-200 sticky left-0 bg-white"
+    "text-left min-w-[200px] pl-0 border-r border-tr-gray-200 sticky left-0 bg-white shadow-tr-1"
   );
 
   return (
