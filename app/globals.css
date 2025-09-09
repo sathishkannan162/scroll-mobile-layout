@@ -61,6 +61,7 @@
   --color-tr-orange: hsl(var(--color-tr-orange));
 
   --font-inter: "Inter", sans-serif;
+  --shadow-tr-1: 0 3px 7px rgba(0, 0, 0, 0.1);
 }
 
 :root {
